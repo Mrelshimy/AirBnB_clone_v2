@@ -46,7 +46,7 @@ class DBStorage:
             for one_class in all_classes:
                 all_obj.extend(self.__session.query(one_class).all())
         else:
-            all_obj = self.__session.query(cls).all()
+            all_obj = all_obj.extend(self.__session.query(cls).all())
         for obj in all_obj:
             new_dict[f"{obj.__class__.__name__}.{obj.id}"] = obj
         return new_dict
@@ -81,5 +81,5 @@ class DBStorage:
                                               expire_on_commit=False))
         self.__session = Session()
 
-    # def close(self):
-    #     self.__session.close()
+    def close(self):
+        self.__session.close()
