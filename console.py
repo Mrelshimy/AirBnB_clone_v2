@@ -126,8 +126,8 @@ class HBNBCommand(cmd.Cmd):
         if args_list[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+        attr_dict = {}
         if len(args_list) > 1:
-            attr_dict = {}
             for item in args_list[1:]:
                 new_list = item.split('=')
                 if args[args.find(new_list[1]) - 1] == "\"":
@@ -145,11 +145,9 @@ class HBNBCommand(cmd.Cmd):
                     new_list[1] = new_list[1].replace("_", " ")
                     new_list[1] = new_list[1].replace('"', r'\"')
                 attr_dict[new_list[0]] = new_list[1]
-                new_instance = HBNBCommand.classes[args_list[0]]()
-                for key, value in attr_dict.items():
+        new_instance = HBNBCommand.classes[args_list[0]]()
+        for key, value in attr_dict.items():
                     setattr(new_instance, key, value)
-        else:
-            new_instance = HBNBCommand.classes[args_list[0]]()
         storage.save()
         print(new_instance.id)
 
