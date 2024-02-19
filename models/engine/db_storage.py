@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """db_storage module"""
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column, String
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 from models.user import User
@@ -39,14 +39,14 @@ class DBStorage:
         Retrieves all objects of a given class from the database,
         or all objects if no class is specified.
         """
-        all_classes = ['State', 'City', 'Amenity', 'Place', 'User', 'Review']
+        all_classes = {'State': State, 'City': City, 'Amenity': Amenity, 'Place': Place, 'User': User, 'Review': Review}
         all_obj = []
         new_dict = {}
         if cls is None:
-            for one_class in all_classes:
-                all_obj.extend(self.__session.query(one_class).all())
+            for value in all_classes.values():
+                all_obj.extend(self.__session.query(value))
         else:
-            all_obj = self.__session.query(cls).all()
+            all_obj = self.__session.query(cls)
         for obj in all_obj:
             new_dict[f"{obj.__class__.__name__}.{obj.id}"] = obj
         return new_dict
