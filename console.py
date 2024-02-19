@@ -126,36 +126,31 @@ class HBNBCommand(cmd.Cmd):
         if args_list[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        attr_dict = {}
-        for item in args_list[1:]:
-            new_list = item.split('=')
-            if args[args.find(new_list[1]) - 1] == "\"":
-                value = new_list[1]
-            else:
-                try:
-                    value = int(new_list[1])
-                except ValueError:
+        if len(args_list) > 1:
+            attr_dict = {}
+            for item in args_list[1:]:
+                new_list = item.split('=')
+                if args[args.find(new_list[1]) - 1] == "\"":
+                    value = new_list[1]
+                else:
                     try:
-                        value = float(new_list[1])
+                        value = int(new_list[1])
                     except ValueError:
-                        value = new_list[1]
-            new_list[1] = value
-            if isinstance(new_list[1], str):
-                new_list[1] = new_list[1].replace("_", " ")
-                new_list[1] = new_list[1].replace('"', r'\"')
-            attr_dict[new_list[0]] = new_list[1]
-
-        if os.getenv("HBNB_TYPE_STORAGE") == "db":
-            attr_dict['updated_at'] = datetime.datetime.now()
-            attr_dict['created_at'] = datetime.datetime.now()
-            attr_dict['id'] = str(uuid.uuid4())
-            new_instance = HBNBCommand.classes[args_list[0]](**attr_dict)
-            storage.save()
+                        try:
+                            value = float(new_list[1])
+                        except ValueError:
+                            value = new_list[1]
+                new_list[1] = value
+                if isinstance(new_list[1], str):
+                    new_list[1] = new_list[1].replace("_", " ")
+                    new_list[1] = new_list[1].replace('"', r'\"')
+                attr_dict[new_list[0]] = new_list[1]
+                new_instance = HBNBCommand.classes[args_list[0]]()
+                for key, value in attr_dict.items():
+                    setattr(new_instance, key, value)
         else:
             new_instance = HBNBCommand.classes[args_list[0]]()
-            for key, value in attr_dict.items():
-                setattr(new_instance, key, value)
-            storage.save()
+        storage.save()
         print(new_instance.id)
 
     def help_create(self):
