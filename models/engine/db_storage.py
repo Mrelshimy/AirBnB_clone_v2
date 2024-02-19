@@ -39,14 +39,15 @@ class DBStorage:
         Retrieves all objects of a given class from the database,
         or all objects if no class is specified.
         """
-        all_classes = {'State': State, 'City': City, 'Amenity': Amenity, 'Place': Place, 'User': User, 'Review': Review}
+        all_classes = {'State': State, 'City': City, 'Amenity': Amenity,
+                       'Place': Place, 'User': User, 'Review': Review}
         all_obj = []
         new_dict = {}
         if cls is None:
             for value in all_classes.values():
-                all_obj.extend(self.__session.query(value))
+                all_obj.extend(self.__session.query(value).all())
         else:
-            all_obj = self.__session.query(cls)
+            all_obj = self.__session.query(cls).all()
         for obj in all_obj:
             new_dict[f"{obj.__class__.__name__}.{obj.id}"] = obj
         return new_dict
