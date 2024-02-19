@@ -16,3 +16,17 @@ class Place(BaseModel):
     latitude = 0.0
     longitude = 0.0
     amenity_ids = []
+
+    # Task 9 updates
+    # reviews = relationship('Review', back_populates='place',
+    #                            cascade='all, delete-orphan')
+    # @property
+    # def reviews(self):
+    #     """getter funtion to get reviews of certain place"""
+    #     from models import storage
+    #     reviews_dict = storage.all('Review')
+    #     place_reviews = []
+    #     for value in reviews_dict.values():
+    #         if value.place_id == self.id:
+    #             place_reviews.append(value)
+    #     return place_reviews
