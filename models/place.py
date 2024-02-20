@@ -6,24 +6,24 @@ from models.amenity import Amenity
 from sqlalchemy import Column, Integer, String, ForeignKey, Float, Table
 from sqlalchemy.orm import relationship
 
-# place_amenity = Table(
-#     'place_amenity',
-#     Base.metadata,
-#     Column(
-#         'place_id',
-#         String(60),
-#         ForeignKey('places.id'),
-#         nullable=False,
-#         primary_key=True
-#     ),
-#     Column(
-#         'amenity_id',
-#         String(60),
-#         ForeignKey('amenities.id'),
-#         nullable=False,
-#         primary_key=True
-#     )
-# )
+place_amenity = Table(
+    'place_amenity',
+    Base.metadata,
+    Column(
+        'place_id',
+        String(60),
+        ForeignKey('places.id'),
+        nullable=False,
+        primary_key=True
+    ),
+    Column(
+        'amenity_id',
+        String(60),
+        ForeignKey('amenities.id'),
+        nullable=False,
+        primary_key=True
+    )
+)
 
 class Place(BaseModel, Base):
     """ A place to stay """
@@ -39,9 +39,9 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        # amenities = relationship("Amenity", secondary=place_amenity,
-        #                          viewonly=False,
-        #                          back_populates="place_amenities")
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 viewonly=False,
+                                 back_populates="place_amenities")
         reviews = relationship('Review', back_populates='place',
                                    cascade='all, delete-orphan')
         user = relationship('User', back_populates='places')
@@ -69,17 +69,18 @@ class Place(BaseModel, Base):
                 if value.place_id == self.id:
                     place_reviews.append(value)
             return place_reviews
-    # @property
-    # def amenities(self):
-    #     """ docuemnt"""
-    #     from models import storage
-    #     all_amenities = []
-    #     stored = storage.all(Amenity).values()
-    #     for amenity in stored:
-    #         if amenity.id in self.amenity_ids:
-    #             all_amenities.append(amenity)
-    #     return all_amenities
-    # @amenities.setter
-    # def amenities(self, obj):
-    #     if type(obj) is Amenity and obj.id not in self.amenity_ids:
-    #         self.amenity_ids.append(obj.id)
+        @property
+        def amenities(self):
+            """getter funtion to get reviews of certain place"""
+            from models import storage
+            all_amenities = []
+            stored = storage.all(Amenity).values()
+            for amenity in stored:
+                if amenity.id in self.amenity_ids:
+                    all_amenities.append(amenity)
+            return all_amenities
+        @amenities.setter
+        def amenities(self, obj):
+            """getter funtion to get reviews of certain place"""
+            if type(obj) is Amenity and obj.id not in self.amenity_ids:
+                self.amenity_ids.append(obj.id)
