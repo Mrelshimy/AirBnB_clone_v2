@@ -82,5 +82,5 @@ class Place(BaseModel, Base):
         @amenities.setter
         def amenities(self, obj):
             """getter funtion to get reviews of certain place"""
-            if type(obj) is Amenity:
+            if isinstance(obj, Amenity) and obj.id not in self.amenity_ids:
                 self.amenity_ids.append(obj.id)
