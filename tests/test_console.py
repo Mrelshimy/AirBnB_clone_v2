@@ -77,6 +77,12 @@ class TestConsole(unittest.TestCase):
             self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
             thekey = f"Amenity.{class_id}"
             self.assertIn(thekey, storage.all().keys())
+        with patch("sys.stdout", new=StringIO()) as otpt:
+            HBNBCommand().onecmd('create Amenity name="Hello" num=123.123')
+            class_id = f"{otpt.getvalue().strip()}"
+            self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
+            thekey = f"Amenity.{class_id}"
+            self.assertIn(thekey, storage.all().keys())
 
     def test_create_errors(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
