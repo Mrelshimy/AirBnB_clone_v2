@@ -42,8 +42,8 @@ class Place(BaseModel, Base):
         # amenities = relationship("Amenity", secondary=place_amenity,
         #                          viewonly=False,
         #                          back_populates="place_amenities")
-        # reviews = relationship('Review', back_populates='place',
-        #                            cascade='all, delete-orphan')
+        reviews = relationship('Review', back_populates='place',
+                                   cascade='all, delete-orphan')
         user = relationship('User', back_populates='places')
         cities = relationship('City', back_populates='places')
 
@@ -59,16 +59,16 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
-    # @property
-    # def reviews(self):
-    #     """getter funtion to get reviews of certain place"""
-    #     from models import storage
-    #     reviews_dict = storage.all('Review')
-    #     place_reviews = []
-    #     for value in reviews_dict.values():
-    #         if value.place_id == self.id:
-    #             place_reviews.append(value)
-    #     return place_reviews
+        @property
+        def reviews(self):
+            """getter funtion to get reviews of certain place"""
+            from models import storage
+            reviews_dict = storage.all('Review')
+            place_reviews = []
+            for value in reviews_dict.values():
+                if value.place_id == self.id:
+                    place_reviews.append(value)
+            return place_reviews
     # @property
     # def amenities(self):
     #     """ docuemnt"""
