@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
+import copy
 import sys
 import os
 import uuid
@@ -243,10 +244,16 @@ class HBNBCommand(cmd.Cmd):
                 return
             for k, v in storage.all(HBNBCommand.classes[args]).items():
                 if k.split('.')[0] == args:
-                    print_list.append(str(v))
+                    x = copy.deepcopy(v)
+                    if hasattr(x, '_sa_instance_state'):
+                        delattr(x, '_sa_instance_state')
+                    print_list.append(str(x))
         else:
             for k, v in storage.all().items():
-                print_list.append(str(v))
+                x = copy.deepcopy(v)
+                if hasattr(x, '_sa_instance_state'):
+                    delattr(x, '_sa_instance_state')
+                print_list.append(str(x))
 
         print(print_list)
 
