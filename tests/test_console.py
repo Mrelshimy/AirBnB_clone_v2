@@ -118,8 +118,6 @@ class TestConsole(unittest.TestCase):
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                     "this test just for FS")
     def test_destroy(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand()
@@ -130,7 +128,7 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd(HBNBCommand()
                                  .precmd(f"destroy State {class_id}"))
             storage.save()
-            # self.assertNotIn(f"State.{class_id}", storage.all().keys())
+            self.assertNotIn(f"State.{class_id}", storage.all().keys())
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand()
                                  .precmd("create State name='mo salah'"))
