@@ -241,14 +241,14 @@ class TestConsole(unittest.TestCase):
                                   str)
             self.assertEqual(storage.all()[f"State.{bs_id}"].name,
                              "mo salah")
-            # HBNBCommand().onecmd(f"update State {bs_id} name 'mohamed'")
-            # storage.save()
-            # self.assertTrue(hasattr(storage.all()[f"State.{bs_id}"],
-            #                         "name"))
-            # self.assertIsInstance(storage.all()[f"State.{bs_id}"].name,
-            #                       str)
-            # self.assertEqual(storage.all()[f"State.{bs_id}"].name,
-            #                  "mohamed")
+            HBNBCommand().onecmd(f"update State {bs_id} name mohamed")
+            storage.save()
+            self.assertTrue(hasattr(storage.all()[f"State.{bs_id}"],
+                                    "name"))
+            self.assertIsInstance(storage.all()[f"State.{bs_id}"].name,
+                                  str)
+            self.assertEqual(storage.all()[f"State.{bs_id}"].name,
+                             "mohamed")
         #     HBNBCommand().onecmd(f"update BaseModel "
         #                          f"{bs_id} age 30")
         #     self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
