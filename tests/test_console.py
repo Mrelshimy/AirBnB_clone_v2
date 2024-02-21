@@ -175,8 +175,6 @@ class TestConsole(unittest.TestCase):
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                     "this test just for FS")
     def test_all(self):
         with patch("sys.stdout", new=StringIO()):
             HBNBCommand().onecmd(HBNBCommand()
@@ -227,6 +225,8 @@ class TestConsole(unittest.TestCase):
             error = "** class doesn't exist **"
             self.assertEqual(otpt.getvalue().strip(), error)
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "this test just for FS")
     def test_update(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand()
