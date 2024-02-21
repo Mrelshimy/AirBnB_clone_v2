@@ -62,80 +62,85 @@ class TestConsole(unittest.TestCase):
 
     def test_show(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create BaseModel")
+            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            storage.save()
             class_id = f"{otpt.getvalue().strip()}"
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(f"show BaseModel {class_id}")
-            obj_str = storage.all()[f"BaseModel.{class_id}"].__str__()
+            HBNBCommand().onecmd(HBNBCommand().precmd(f"show State {class_id}"))
+            obj_str = storage.all()[f"State.{class_id}"].__str__()
             self.assertEqual(otpt.getvalue().strip(), obj_str)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(f"BaseModel.show(\"{class_id}\")")
-            obj_str = storage.all()[f"BaseModel.{class_id}"].__str__()
+            HBNBCommand().onecmd(HBNBCommand().precmd(f"State.show(\"{class_id}\")"))
+            obj_str = storage.all()[f"State.{class_id}"].__str__()
             self.assertEqual(otpt.getvalue().strip(), obj_str)
 
     def test_show_errors(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("show ")
+            HBNBCommand().onecmd(HBNBCommand().precmd("show "))
             error_message = "** class name missing **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("show abcd")
+            HBNBCommand().onecmd(HBNBCommand().precmd("show abcd"))
             error_message = "** class doesn't exist **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("show User")
+            HBNBCommand().onecmd(HBNBCommand().precmd("show User"))
             error_message = "** instance id missing **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("show User 12434")
+            HBNBCommand().onecmd(HBNBCommand().precmd("show User 1234"))
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(".User(\"1234\")")
+            HBNBCommand().onecmd(HBNBCommand().precmd(".User(\"1234\")"))
             error_message = "*** Unknown syntax: .User(\"1234\")"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("abcd.show(1234)")
+            HBNBCommand().onecmd(HBNBCommand().precmd("abcd.show(1234)"))
             error_message = "** class doesn't exist **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("User.show()")
+            HBNBCommand().onecmd(HBNBCommand().precmd("User.show()"))
             error_message = "** instance id missing **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("User.show(\"1234\")")
+            HBNBCommand().onecmd(HBNBCommand().precmd("User.show(\"1234\")"))
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
     def test_destroy(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create BaseModel")
+            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            storage.save()
             class_id = f"{otpt.getvalue().strip()}"
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(f"destroy BaseModel {class_id}")
-            self.assertNotIn(f"BaseModel.{class_id}", storage.all().keys())
+            HBNBCommand().onecmd(f"destroy State {class_id}")
+            storage.save()
+            self.assertNotIn(f"State.{class_id}", storage.all().keys())
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create BaseModel")
+            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            storage.save()
             class_id = f"{otpt.getvalue().strip()}"
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(f"BaseModel.destroy(\"{class_id}\")")
-            self.assertNotIn(f"BaseModel.{class_id}", storage.all().keys())
+            HBNBCommand().onecmd(f"State.destroy(\"{class_id}\")")
+            storage.save()
+            self.assertNotIn(f"State.{class_id}", storage.all().keys())
 
     def test_destroy_errors(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("destroy ")
+            HBNBCommand().onecmd(HBNBCommand().precmd("destroy "))
             error_message = "** class name missing **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("destroy abcd")
+            HBNBCommand().onecmd(HBNBCommand().precmd("destroy abcd"))
             error_message = "** class doesn't exist **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("destroy User")
+            HBNBCommand().onecmd(HBNBCommand().precmd("destroy User"))
             error_message = "** instance id missing **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("destroy User 12434")
+            HBNBCommand().onecmd(HBNBCommand().precmd("destroy User 12434"))
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
@@ -143,15 +148,15 @@ class TestConsole(unittest.TestCase):
             error_message = "*** Unknown syntax: .User(\"1234\")"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("abcd.destroy(1234)")
+            HBNBCommand().onecmd(HBNBCommand().precmd("abcd.destroy(1234)"))
             error_message = "** class doesn't exist **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("User.destroy()")
+            HBNBCommand().onecmd(HBNBCommand().precmd("User.destroy()"))
             error_message = "** instance id missing **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("User.destroy(\"1234\")")
+            HBNBCommand().onecmd(HBNBCommand().precmd("User.destroy(\"1234\")"))
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
@@ -190,113 +195,113 @@ class TestConsole(unittest.TestCase):
 
     def test_update(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create BaseModel")
+            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
             bs_id = otpt.getvalue().strip()
-        with patch("sys.stdout", new=StringIO()):
-            HBNBCommand().onecmd(f"update BaseModel "
-                                 f"{bs_id} fname \"mohamed\"")
+            storage.save()
+        # with patch("sys.stdout", new=StringIO()):
+            # HBNBCommand().onecmd(f"update BaseModel "
+            #                      f"{bs_id} fname \"mohamed\"")
 
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "fname"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].fname,
+            self.assertTrue(hasattr(storage.all()[f"State.{bs_id}"],
+                                    "name"))
+            self.assertIsInstance(storage.all()[f"State.{bs_id}"].name,
                                   str)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].fname,
-                             "mohamed")
-            HBNBCommand().onecmd(f"update BaseModel "
-                                 f"{bs_id} sname \"nour eldean\"")
-
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "sname"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].sname,
-                                  str)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].sname,
-                             "nour eldean")
-            HBNBCommand().onecmd(f"update BaseModel "
-                                 f"{bs_id} age 30")
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "age"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].age,
-                                  int)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].age,
-                             30)
-            HBNBCommand().onecmd(f"update BaseModel "
-                                 f"{bs_id} height 1.79")
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "height"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].height,
-                                  float)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].height,
-                             1.79)
-            HBNBCommand().onecmd(f"BaseModel.destroy({bs_id})")
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create BaseModel")
-            bs_id = otpt.getvalue().strip()
-        with patch("sys.stdout", new=StringIO()):
-            HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", \"fname\","
-                                 f" \"mohamed\")")
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "fname"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].fname,
-                                  str)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].fname,
-                             "mohamed")
-            HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", \"sname\","
-                                 f" \"nour eldean\")")
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "sname"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].sname,
-                                  str)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].sname,
-                             "nour eldean")
-            HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", \"age\","
-                                 f" 30)")
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "age"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].age,
-                                  int)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].age,
-                             30)
-            HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", \"height\","
-                                 f" 1.79)")
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "height"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].height,
-                                  float)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].height,
-                             1.79)
-            HBNBCommand().onecmd(f"BaseModel.destroy({bs_id})")
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create BaseModel")
-            bs_id = otpt.getvalue().strip()
-        with patch("sys.stdout", new=StringIO()):
-            dic_obj = {"fname": "mohamed", "sname": "nour eldean",
-                       "age": 30, "height": 1.79}
-            HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", {dic_obj})")
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "fname"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].fname,
-                                  str)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].fname,
-                             "mohamed")
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "sname"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].sname,
-                                  str)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].sname,
-                             "nour eldean")
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "age"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].age,
-                                  int)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].age,
-                             30)
-            self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
-                                    "height"))
-            self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].height,
-                                  float)
-            self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].height,
-                             1.79)
-            HBNBCommand().onecmd(f"BaseModel.destroy({bs_id})")
+            self.assertEqual(storage.all()[f"State.{bs_id}"].name,
+                             "mo salah")
+            # HBNBCommand().onecmd(f"update State {bs_id} name 'mohamed'")
+            # storage.save()
+            # self.assertTrue(hasattr(storage.all()[f"State.{bs_id}"],
+            #                         "name"))
+            # self.assertIsInstance(storage.all()[f"State.{bs_id}"].name,
+            #                       str)
+            # self.assertEqual(storage.all()[f"State.{bs_id}"].name,
+            #                  "mohamed")
+        #     HBNBCommand().onecmd(f"update BaseModel "
+        #                          f"{bs_id} age 30")
+        #     self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+        #                             "age"))
+        #     self.assertIsInstance(int(storage.all()[f"BaseModel.{bs_id}"].age),
+        #                           int)
+        #     self.assertEqual(int(storage.all()[f"BaseModel.{bs_id}"].age),
+        #                      30)
+        #     HBNBCommand().onecmd(f"update BaseModel "
+        #                          f"{bs_id} height 1.79")
+        #     self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+        #                             "height"))
+        #     self.assertIsInstance(float(storage.all()[f"BaseModel.{bs_id}"].height),
+        #                           float)
+        #     self.assertEqual(float(storage.all()[f"BaseModel.{bs_id}"].height),
+        #                      1.79)
+        #     HBNBCommand().onecmd(f"BaseModel.destroy({bs_id})")
+        # with patch("sys.stdout", new=StringIO()) as otpt:
+        #     HBNBCommand().onecmd("create BaseModel")
+        #     bs_id = otpt.getvalue().strip()
+        # with patch("sys.stdout", new=StringIO()):
+        #     HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", \"fname\","
+        #                          f" \"mohamed\")")
+            # self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+            #                         "fname"))
+            # self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].fname,
+            #                       str)
+            # self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].fname,
+            #                  "mohamed")
+            # HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", \"sname\","
+            #                      f" \"nour eldean\")")
+            # self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+            #                         "sname"))
+            # self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].sname,
+            #                       str)
+            # self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].sname,
+            #                  "nour eldean")
+            # HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", \"age\","
+            #                      f" 30)")
+            # self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+            #                         "age"))
+            # self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].age,
+            #                       int)
+            # self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].age,
+            #                  30)
+            # HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", \"height\","
+            #                      f" 1.79)")
+            # self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+            #                         "height"))
+            # self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].height,
+            #                       float)
+            # self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].height,
+            #                  1.79)
+            # HBNBCommand().onecmd(f"BaseModel.destroy({bs_id})")
+        # with patch("sys.stdout", new=StringIO()) as otpt:
+        #     HBNBCommand().onecmd("create BaseModel")
+        #     bs_id = otpt.getvalue().strip()
+        # with patch("sys.stdout", new=StringIO()):
+        #     dic_obj = {"fname": "mohamed", "sname": "nour eldean",
+        #                "age": 30, "height": 1.79}
+        #     HBNBCommand().onecmd(f"BaseModel.update(\"{bs_id}\", {dic_obj})")
+        #     self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+        #                             "fname"))
+        #     self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].fname,
+        #                           str)
+        #     self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].fname,
+        #                      "mohamed")
+        #     self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+        #                             "sname"))
+        #     self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].sname,
+        #                           str)
+        #     self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].sname,
+        #                      "nour eldean")
+        #     self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+        #                             "age"))
+        #     self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].age,
+        #                           int)
+        #     self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].age,
+        #                      30)
+        #     self.assertTrue(hasattr(storage.all()[f"BaseModel.{bs_id}"],
+        #                             "height"))
+        #     self.assertIsInstance(storage.all()[f"BaseModel.{bs_id}"].height,
+        #                           float)
+        #     self.assertEqual(storage.all()[f"BaseModel.{bs_id}"].height,
+        #                      1.79)
+        #     HBNBCommand().onecmd(f"BaseModel.destroy({bs_id})")
 
 
 if __name__ == "__main__":

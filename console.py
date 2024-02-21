@@ -185,7 +185,10 @@ class HBNBCommand(cmd.Cmd):
                 show_obj = storage._DBStorage__session.query(
                     HBNBCommand.classes[c_name]).filter(
                         HBNBCommand.classes[c_name].id == c_id).first()
-                print(show_obj)
+                if show_obj is not None:
+                    print(show_obj)
+                else:
+                    print("** no instance found **")
             else:
                 print(storage._FileStorage__objects[key])
         except KeyError:
