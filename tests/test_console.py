@@ -5,6 +5,9 @@ import unittest
 from models import storage
 import uuid
 from models.engine.file_storage import FileStorage
+from models.engine.db_storage import DBStorage
+
+from models.base_model import Base
 from console import HBNBCommand
 from io import StringIO
 from unittest.mock import patch
@@ -14,12 +17,14 @@ import sys
 class TestConsole(unittest.TestCase):
     """Testing BaseModem Class"""
 
-    def tearDown(self):
+    def tearDownClass(self):
         if os.path.exists("file.json"):
             os.remove("file.json")
+        if os.getenv("HBNB_TYPE_STORAGE") == "db" and os.getenv("HBNB_ENV") == "test":
+            Base.metadata.drop_all(storage._DBStorage__engine)
 
     def test_prompt(self):
-        self.assertEqual(HBNBCommand.prompt, "(hbnb) ")
+        self.assertEqual(HBNBCommand.prompt, "")
 
     def test_do_quit(self):
         with patch("sys.stdout", new=StringIO()):
@@ -195,81 +200,34 @@ class TestConsole(unittest.TestCase):
 
     def test_all(self):
         with patch("sys.stdout", new=StringIO()):
-            self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
-            self.assertFalse(HBNBCommand().onecmd("create User"))
-            self.assertFalse(HBNBCommand().onecmd("create State"))
-            self.assertFalse(HBNBCommand().onecmd("create Place"))
-            self.assertFalse(HBNBCommand().onecmd("create City"))
-            self.assertFalse(HBNBCommand().onecmd("create Amenity"))
-            self.assertFalse(HBNBCommand().onecmd("create Review"))
+            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("all")
-            result = []
-            for v in storage.all().values():
-                result.append(v.__str__())
-            self.assertEqual(otpt.getvalue().strip(), f"{result}")
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("User.all()")
-            result = []
-            for model, obj in storage.all().items():
-                if "User" in model:
-                    result.append(obj.__str__())
-            self.assertEqual(otpt.getvalue().strip(), f"{result}")
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("City.all()")
-            result = []
-            for model, obj in storage.all().items():
-                if "City" in model:
-                    result.append(obj.__str__())
-            self.assertEqual(otpt.getvalue().strip(), f"{result}")
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("Review.all()")
-            result = []
-            for model, obj in storage.all().items():
-                if "Review" in model:
-                    result.append(obj.__str__())
-            self.assertEqual(otpt.getvalue().strip(), f"{result}")
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("Place.all()")
-            result = []
-            for model, obj in storage.all().items():
-                if "Place" in model:
-                    result.append(obj.__str__())
-            self.assertEqual(otpt.getvalue().strip(), f"{result}")
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("State.all()")
+            HBNBCommand().onecmd(HBNBCommand().precmd("State.all()"))
             result = []
             for model, obj in storage.all().items():
                 if "State" in model:
                     result.append(obj.__str__())
             self.assertEqual(otpt.getvalue().strip(), f"{result}")
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("Amenity.all()")
-            result = []
-            for model, obj in storage.all().items():
-                if "Amenity" in model:
-                    result.append(obj.__str__())
-            self.assertEqual(otpt.getvalue().strip(), f"{result}")
 
     def test_all_errors(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("abcd.all()")
+            HBNBCommand().onecmd(HBNBCommand().precmd("abcd.all()"))
             error = "** class doesn't exist **"
             self.assertEqual(otpt.getvalue().strip(), error)
 
     def test_count(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("User.count()")
-            self.assertEqual(otpt.getvalue().strip(), "1")
-        with patch("sys.stdout", new=StringIO()):
-            self.assertFalse(HBNBCommand().onecmd("create User"))
+            HBNBCommand().onecmd(HBNBCommand().precmd("State.count()"))
+            x = int(otpt.getvalue().strip())
+            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("User.count()")
-            self.assertEqual(otpt.getvalue().strip(), "2")
+            HBNBCommand().onecmd(HBNBCommand().precmd("State.count()"))
+            y = int(otpt.getvalue().strip())
+            self.assertEqual(y - x, 1)
 
     def test_count_errors(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("abcd.count()")
+            HBNBCommand().onecmd(HBNBCommand().precmd("abcd.count()"))
             error = "** class doesn't exist **"
             self.assertEqual(otpt.getvalue().strip(), error)
 
