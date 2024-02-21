@@ -175,6 +175,8 @@ class TestConsole(unittest.TestCase):
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "this test just for FS")
     def test_all(self):
         with patch("sys.stdout", new=StringIO()):
             HBNBCommand().onecmd(HBNBCommand()
