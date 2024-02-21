@@ -63,8 +63,8 @@ class TestConsole(unittest.TestCase):
             error_message = "*** Unknown syntax: User.create()"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
-    # @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-    #                  "this test just for FS")
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "this test just for FS")
     def test_show(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand()
@@ -116,8 +116,8 @@ class TestConsole(unittest.TestCase):
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
-    # @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-    #                  "this test just for FS")
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "this test just for FS")
     def test_destroy(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand()
@@ -175,8 +175,6 @@ class TestConsole(unittest.TestCase):
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
-    # @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-    #                  "this test just for FS")
     def test_all(self):
         with patch("sys.stdout", new=StringIO()):
             HBNBCommand().onecmd(HBNBCommand()
@@ -192,16 +190,16 @@ class TestConsole(unittest.TestCase):
                         delattr(x, '_sa_instance_state')
                     result.append(x.__str__())
             self.assertEqual(otpt.getvalue().strip(), f"{result}")
-        # with patch("sys.stdout", new=StringIO()) as otpt:
-        #     HBNBCommand().onecmd(HBNBCommand()
-        #                          .precmd("all"))
-        #     result = []
-        #     for model, obj in storage.all().items():
-        #         x = copy.deepcopy(obj)
-        #         if hasattr(x, '_sa_instance_state'):
-        #             delattr(x, '_sa_instance_state')
-        #         result.append(x.__str__())
-        #     self.assertEqual(otpt.getvalue().strip(), f"{result}")
+        with patch("sys.stdout", new=StringIO()) as otpt:
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("all"))
+            result = []
+            for model, obj in storage.all().items():
+                x = copy.deepcopy(obj)
+                if hasattr(x, '_sa_instance_state'):
+                    delattr(x, '_sa_instance_state')
+                result.append(x.__str__())
+            self.assertEqual(otpt.getvalue().strip(), f"{result}")
 
     def test_all_errors(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
