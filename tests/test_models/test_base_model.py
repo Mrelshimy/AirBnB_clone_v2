@@ -24,7 +24,7 @@ class test_basemodel(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('file.json')
-        except:
+        finally:
             pass
 
     def test_default(self):
@@ -33,7 +33,7 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(type(i), self.value)
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                 "this test just for FS")
+                     "this test just for FS")
     def test_kwargs(self):
         """ """
         i = self.value()
@@ -50,7 +50,7 @@ class test_basemodel(unittest.TestCase):
             new = BaseModel(**copy)
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                 "this test just for FS")
+                     "this test just for FS")
     def test_save_file(self):
         """ Testing save """
         i = self.value()
@@ -76,7 +76,7 @@ class test_basemodel(unittest.TestCase):
                          i.__dict__))
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                 "this test just for FS")
+                     "this test just for FS")
     def test_todict(self):
         """ """
         i = self.value()
@@ -106,7 +106,7 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(type(new.created_at), datetime.datetime)
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                 "this test just for FS")
+                     "this test just for FS")
     def test_updated_at(self):
         """ """
         new = self.value()
