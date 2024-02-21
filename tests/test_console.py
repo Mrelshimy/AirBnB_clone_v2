@@ -4,14 +4,10 @@ import os
 import unittest
 from models import storage
 import uuid
-from models.engine.file_storage import FileStorage
-from models.engine.db_storage import DBStorage
-
-from models.base_model import Base
 from console import HBNBCommand
 from io import StringIO
 from unittest.mock import patch
-import sys
+import console
 
 
 class TestConsole(unittest.TestCase):
@@ -20,6 +16,11 @@ class TestConsole(unittest.TestCase):
     def tearDown(self):
         if os.path.exists("file.json"):
             os.remove("file.json")
+
+    def test_doc_console(self):
+        """ test_doc_console(self): to test if module and class has docs """
+        self.assertIsNotNone(HBNBCommand.__doc__, 'no docs for Base class')
+        self.assertIsNotNone(console.__doc__, 'no docs for module')
 
     def test_prompt(self):
         self.assertEqual(HBNBCommand.prompt, "")
