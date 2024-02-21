@@ -187,7 +187,10 @@ class HBNBCommand(cmd.Cmd):
                     HBNBCommand.classes[c_name]).filter(
                         HBNBCommand.classes[c_name].id == c_id).first()
                 if show_obj is not None:
-                    print(show_obj)
+                    obj_str = copy.deepcopy(show_obj)
+                    if hasattr(obj_str, '_sa_instance_state'):
+                        delattr(obj_str, '_sa_instance_state')
+                    print(obj_str)
                 else:
                     print("** no instance found **")
             else:

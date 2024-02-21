@@ -63,8 +63,6 @@ class TestConsole(unittest.TestCase):
             error_message = "*** Unknown syntax: User.create()"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                     "this test just for FS")
     def test_show(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand()
@@ -74,13 +72,17 @@ class TestConsole(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand()
                                  .precmd(f"show State {class_id}"))
-            obj_str = storage.all()[f"State.{class_id}"].__str__()
-            self.assertEqual(otpt.getvalue().strip(), obj_str)
+            obj_str = copy.deepcopy(storage.all()[f"State.{class_id}"])
+            if hasattr(obj_str, '_sa_instance_state'):
+                delattr(obj_str, '_sa_instance_state')
+            self.assertEqual(otpt.getvalue().strip(), obj_str.__str__())
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand()
                                  .precmd(f"State.show(\"{class_id}\")"))
-            obj_str = storage.all()[f"State.{class_id}"].__str__()
-            self.assertEqual(otpt.getvalue().strip(), obj_str)
+            obj_str = copy.deepcopy(storage.all()[f"State.{class_id}"])
+            if hasattr(obj_str, '_sa_instance_state'):
+                delattr(obj_str, '_sa_instance_state')
+            self.assertEqual(otpt.getvalue().strip(), obj_str.__str__())
 
     def test_show_errors(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
@@ -116,8 +118,8 @@ class TestConsole(unittest.TestCase):
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                     "this test just for FS")
+    # @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+    #                  "this test just for FS")
     def test_destroy(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand()
