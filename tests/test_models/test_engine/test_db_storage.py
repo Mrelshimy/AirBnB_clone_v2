@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """test db"""
 import unittest
-from models.engine import db_storage
+from models.engine.db_storage import DBStorage
 import os
 
-@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "test not relevant")
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "this test just for db")
 class test_dbStorage(unittest.TestCase):
-    pass
+    def test_documentation(self):
+        self.assertIsNotNone(DBStorage.__doc__)
+    
