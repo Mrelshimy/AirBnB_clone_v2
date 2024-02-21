@@ -32,6 +32,8 @@ class test_basemodel(unittest.TestCase):
         i = self.value()
         self.assertEqual(type(i), self.value)
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "this test just for FS")
     def test_kwargs(self):
         """ """
         i = self.value()
@@ -47,7 +49,9 @@ class test_basemodel(unittest.TestCase):
         with self.assertRaises(TypeError):
             new = BaseModel(**copy)
 
-    def test_save(self):
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "this test just for FS")
+    def test_save_file(self):
         """ Testing save """
         i = self.value()
         i.save()
@@ -56,12 +60,23 @@ class test_basemodel(unittest.TestCase):
             j = json.load(f)
             self.assertEqual(j[key], i.to_dict())
 
+    # def test_save_db(self):
+    #     """ Testing save """
+    #     i = self.value()
+    #     i.save()
+    #     key = self.name + "." + i.id
+    #     with open('file.json', 'r') as f:
+    #         j = json.load(f)
+    #         self.assertEqual(j[key], i.to_dict())
+
     def test_str(self):
         """ """
         i = self.value()
         self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id,
                          i.__dict__))
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "this test just for FS")
     def test_todict(self):
         """ """
         i = self.value()
@@ -90,6 +105,8 @@ class test_basemodel(unittest.TestCase):
         new = self.value()
         self.assertEqual(type(new.created_at), datetime.datetime)
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "this test just for FS")
     def test_updated_at(self):
         """ """
         new = self.value()

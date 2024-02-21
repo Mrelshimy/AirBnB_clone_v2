@@ -7,7 +7,7 @@ import os
 
 
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                 "this test just for Fs")
+                 "this test just for FS")
 class test_fileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 
