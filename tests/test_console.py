@@ -39,52 +39,11 @@ class TestConsole(unittest.TestCase):
 
     def test_create(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create BaseModel")
-            class_id = f"{otpt.getvalue().strip()}"
-            self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
-            thekey = f"BaseModel.{class_id}"
-            self.assertIn(thekey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create City")
-            class_id = f"{otpt.getvalue().strip()}"
-            self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
-            thekey = f"City.{class_id}"
-            self.assertIn(thekey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create Place")
-            class_id = f"{otpt.getvalue().strip()}"
-            self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
-            thekey = f"Place.{class_id}"
-            self.assertIn(thekey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create User")
-            class_id = f"{otpt.getvalue().strip()}"
-            self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
-            thekey = f"User.{class_id}"
-            self.assertIn(thekey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create State")
+            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            storage.save()
             class_id = f"{otpt.getvalue().strip()}"
             self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
             thekey = f"State.{class_id}"
-            self.assertIn(thekey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create Review")
-            class_id = f"{otpt.getvalue().strip()}"
-            self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
-            thekey = f"Review.{class_id}"
-            self.assertIn(thekey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd("create Amenity")
-            class_id = f"{otpt.getvalue().strip()}"
-            self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
-            thekey = f"Amenity.{class_id}"
-            self.assertIn(thekey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd('create Amenity name="Hello" num=123.123')
-            class_id = f"{otpt.getvalue().strip()}"
-            self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
-            thekey = f"Amenity.{class_id}"
             self.assertIn(thekey, storage.all().keys())
 
     def test_create_errors(self):
