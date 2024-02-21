@@ -39,7 +39,8 @@ class TestConsole(unittest.TestCase):
 
     def test_create(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("create State name='mo salah'"))
             storage.save()
             class_id = f"{otpt.getvalue().strip()}"
             self.assertIsInstance(uuid.UUID(class_id), uuid.UUID)
@@ -64,15 +65,18 @@ class TestConsole(unittest.TestCase):
                      "this test just for FS")
     def test_show(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("create State name='mo salah'"))
             storage.save()
             class_id = f"{otpt.getvalue().strip()}"
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd(f"show State {class_id}"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd(f"show State {class_id}"))
             obj_str = storage.all()[f"State.{class_id}"].__str__()
             self.assertEqual(otpt.getvalue().strip(), obj_str)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd(f"State.show(\"{class_id}\")"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd(f"State.show(\"{class_id}\")"))
             obj_str = storage.all()[f"State.{class_id}"].__str__()
             self.assertEqual(otpt.getvalue().strip(), obj_str)
 
@@ -114,19 +118,23 @@ class TestConsole(unittest.TestCase):
                      "this test just for FS")
     def test_destroy(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("create State name='mo salah'"))
             storage.save()
             class_id = f"{otpt.getvalue().strip()}"
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd(f"destroy State {class_id}"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd(f"destroy State {class_id}"))
             storage.save()
             # self.assertNotIn(f"State.{class_id}", storage.all().keys())
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("create State name='mo salah'"))
             storage.save()
             class_id = f"{otpt.getvalue().strip()}"
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd(f"State.destroy(\"{class_id}\")"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd(f"State.destroy(\"{class_id}\")"))
             storage.save()
             self.assertNotIn(f"State.{class_id}", storage.all().keys())
 
@@ -160,7 +168,8 @@ class TestConsole(unittest.TestCase):
             error_message = "** instance id missing **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd("User.destroy(\"1234\")"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("User.destroy(\"1234\")"))
             error_message = "** no instance found **"
             self.assertEqual(otpt.getvalue().strip(), error_message)
 
@@ -168,9 +177,11 @@ class TestConsole(unittest.TestCase):
                      "this test just for FS")
     def test_all(self):
         with patch("sys.stdout", new=StringIO()):
-            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("create State name='mo salah'"))
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd("State.all()"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("State.all()"))
             result = []
             for model, obj in storage.all().items():
                 if "State" in model:
@@ -187,9 +198,11 @@ class TestConsole(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as otpt:
             HBNBCommand().onecmd(HBNBCommand().precmd("State.count()"))
             x = int(otpt.getvalue().strip())
-            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("create State name='mo salah'"))
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd("State.count()"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("State.count()"))
             y = int(otpt.getvalue().strip())
             self.assertEqual(y - x, 1)
 
@@ -201,7 +214,8 @@ class TestConsole(unittest.TestCase):
 
     def test_update(self):
         with patch("sys.stdout", new=StringIO()) as otpt:
-            HBNBCommand().onecmd(HBNBCommand().precmd("create State name='mo salah'"))
+            HBNBCommand().onecmd(HBNBCommand()
+                                 .precmd("create State name='mo salah'"))
             bs_id = otpt.getvalue().strip()
             storage.save()
         # with patch("sys.stdout", new=StringIO()):
