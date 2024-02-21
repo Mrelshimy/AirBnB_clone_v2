@@ -17,11 +17,9 @@ import sys
 class TestConsole(unittest.TestCase):
     """Testing BaseModem Class"""
 
-    def tearDownClass(self):
+    def tearDown(self):
         if os.path.exists("file.json"):
             os.remove("file.json")
-        if os.getenv("HBNB_TYPE_STORAGE") == "db" and os.getenv("HBNB_ENV") == "test":
-            Base.metadata.drop_all(storage._DBStorage__engine)
 
     def test_prompt(self):
         self.assertEqual(HBNBCommand.prompt, "")
