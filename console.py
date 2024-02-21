@@ -194,7 +194,10 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     print("** no instance found **")
             else:
-                print(storage._FileStorage__objects[key])
+                obj_str = copy.deepcopy(storage._FileStorage__objects[key])
+                if hasattr(obj_str, '_sa_instance_state'):
+                    delattr(obj_str, '_sa_instance_state')
+                print(obj_str)
         except KeyError:
             print("** no instance found **")
 
