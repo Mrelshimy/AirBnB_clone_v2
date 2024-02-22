@@ -5,7 +5,6 @@ from models.city import City
 from models.state import State
 
 
-
 class test_City(test_basemodel):
     """ """
 
