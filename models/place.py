@@ -25,6 +25,7 @@ place_amenity = Table(
     )
 )
 
+
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = "places"
@@ -43,7 +44,7 @@ class Place(BaseModel, Base):
                                  viewonly=False,
                                  back_populates="place_amenities")
         reviews = relationship('Review', back_populates='place',
-                                   cascade='all, delete-orphan')
+                               cascade='all, delete-orphan')
         user = relationship('User', back_populates='places')
         cities = relationship('City', back_populates='places')
 
@@ -59,6 +60,7 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
         @property
         def reviews(self):
             """getter funtion to get reviews of certain place"""
@@ -69,6 +71,7 @@ class Place(BaseModel, Base):
                 if value.place_id == self.id:
                     place_reviews.append(value)
             return place_reviews
+
         @property
         def amenities(self):
             """getter funtion to get reviews of certain place"""
@@ -79,6 +82,7 @@ class Place(BaseModel, Base):
                 if amenity.id in self.amenity_ids:
                     all_amenities.append(amenity)
             return all_amenities
+
         @amenities.setter
         def amenities(self, obj):
             """getter funtion to get reviews of certain place"""

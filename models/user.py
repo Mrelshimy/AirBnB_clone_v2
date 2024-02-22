@@ -17,11 +17,9 @@ class User(BaseModel, Base):
         last_name = Column(String(128))
         reviews = relationship('Review', back_populates='user',
                                cascade='all, delete-orphan')
-        places = relationship(
-        'Place',
-        cascade="all, delete, delete-orphan",
-        back_populates='user'
-        )
+        places = relationship('Place',
+                              cascade="all, delete, delete-orphan",
+                              back_populates='user')
     else:
         email = ''
         password = ''

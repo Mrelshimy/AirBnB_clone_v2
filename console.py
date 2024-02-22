@@ -232,7 +232,7 @@ class HBNBCommand(cmd.Cmd):
             if os.getenv("HBNB_TYPE_STORAGE") == "db":
                 storage.delete(storage.all()[key])
             else:
-                del(storage.all()[key])
+                del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
