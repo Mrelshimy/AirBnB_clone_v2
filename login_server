@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Script to transfer file to server
+username=ubuntu
+path_to_ssh=~/.ssh/school
+if [ "$1" = "lb" ]
+then
+	ip=54.226.23.175
+elif [ "$1" = "web1" ]
+then
+	ip=52.3.255.212
+elif [ "$1" = "web2" ]
+then
+	ip=100.24.235.178
+fi
+ssh -i "$path_to_ssh" "$username@$ip"

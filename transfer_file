@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Script to transfer file to server
+if [ "$#" -ne 3 ]; then
+	echo "Usage: transfer_file PATH_TO_FILE SERVERNAME"
+fi
+file="$1"
+username=ubuntu
+path_to_ssh=~/.ssh/school
+if [ "$2" = "lb" ]
+then
+	ip=54.226.23.175
+elif [ "$2" = "web1" ]
+then
+	ip=52.3.255.212
+elif [ "$2" = "web2" ]
+then
+	ip=100.24.235.178
+fi
+scp -o StrictHostKeyChecking=no -i "$path_to_ssh" "$file" "$username@$ip":~
