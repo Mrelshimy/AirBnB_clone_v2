@@ -5,7 +5,7 @@ sudo apt -y install nginx
 
 sudo mkdir -p /data/web_static/shared/
 sudo mkdir -p /data/web_static/releases/test/
-sudo echo "Raafat is here" > /data/web_static/releases/test/index.html
+echo "Raafat is here" > /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 sudo chown -R ubuntu:ubuntu /data/
