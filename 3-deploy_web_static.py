@@ -49,4 +49,4 @@ def deploy():
     archive = do_pack()
     if archive is None:
         return False
-    do_deploy(archive)
+    return do_deploy(archive)
