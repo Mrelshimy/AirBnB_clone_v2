@@ -19,4 +19,4 @@ def do_pack():
     archive = local(f"tar -cvzf versions/{file} web_static")
     if archive.stderr != "":
         return None
-    return file.os.path()
+    return f"versions/web_static_{file}.tgz"
