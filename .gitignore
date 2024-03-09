@@ -4,3 +4,4 @@ main*
 __pycache__/
 login_server
 transfer_file
+install_fabric
