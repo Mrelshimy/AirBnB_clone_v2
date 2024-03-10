@@ -15,16 +15,16 @@ def do_deploy(archive_path):
     archive_name = archive_path[9:]
     try:
         put(archive_path, '/tmp/')
-        run(f'sudo mkdir -p /data/web_static/releases/{name}/')
-        run(f'sudo tar -xzf /tmp/{archive_name} -C\
- /data/web_static/releases/{name}/')
-        run(f'sudo rm /tmp/{archive_name}')
-        run(f'sudo mv /data/web_static/releases/{name}/web_static/*\
- /data/web_static/releases/{name}/')
-        run(f'sudo rm -r /data/web_static/releases/{name}/web_static')
-        run(f'sudo rm -rf /data/web_static/current')
-        run(f'sudo ln -s /data/web_static/releases/{name}/\
- /data/web_static/current')
+        sudo('mkdir -p /data/web_static/releases/{}/'.format{name})
+        sudo(f'tar -xzf /tmp/{} -C\
+ /data/web_static/releases/{}/'.format(archive_name, name))
+        sudo('rm /tmp/{}'.format(archive_name))
+        sudo('rsync -a /data/web_static/releases/{}/web_static/*\
+ /data/web_static/releases/{}/'.format(name, name))
+        sudo('rm -r /data/web_static/releases/{}/web_static'.format(name))
+        sudo('rm -rf /data/web_static/current')
+        sudo('ln -s /data/web_static/releases/{}/\
+ /data/web_static/current'.format(name))
         print("New version deployed!")
     except Exception:
         return False
