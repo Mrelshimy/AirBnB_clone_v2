@@ -18,4 +18,4 @@ def do_clean(number=0):
         archives = run("ls -tr").split()
         archives = [x for x in archives if "web_static_" in x]
         [archives.pop() for i in range(number)]
-        [run("rm -rf ./{}".format(x)) for x in archives]
+        [run("sudo rm -rf ./{}".format(x)) for x in archives]
