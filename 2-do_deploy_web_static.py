@@ -9,10 +9,11 @@ env.hosts = ['52.3.255.212', '100.24.235.178']
 
 def do_deploy(archive_path):
     """Function to deploy archive to servers"""
-    if not os.path.exists(archive_path):
+
+    if os.path.isfile(archive_path) is False:
         return False
-    name = archive_path[9:-4]
-    archive_name = archive_path[9:]
+    archive_name = archive_path.split("/")[-1]
+    name = archive_name.split(".")[0]
     try:
         put(archive_path, '/tmp/')
         sudo('mkdir -p /data/web_static/releases/{}/'.format(name))
