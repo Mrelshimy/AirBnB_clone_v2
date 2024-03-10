@@ -15,8 +15,8 @@ def do_deploy(archive_path):
     archive_name = archive_path[9:]
     try:
         put(archive_path, '/tmp/')
-        sudo('mkdir -p /data/web_static/releases/{}/'.format{name})
-        sudo(f'tar -xzf /tmp/{} -C\
+        sudo('mkdir -p /data/web_static/releases/{}/'.format(name))
+        sudo('tar -xzf /tmp/{} -C\
  /data/web_static/releases/{}/'.format(archive_name, name))
         sudo('rm /tmp/{}'.format(archive_name))
         sudo('rsync -a /data/web_static/releases/{}/web_static/*\
