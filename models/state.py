@@ -4,6 +4,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import String, Column
 from sqlalchemy.orm import relationship
 import os
+import shlex
 
 
 class State(BaseModel, Base):
@@ -19,11 +20,16 @@ class State(BaseModel, Base):
 
         @property
         def cities(self):
-            """getter funtion to get cities of certain state"""
             from models import storage
-            city_dict = storage.all("City")
-            state_cities = []
-            for value in city_dict.values():
-                if value.state_id == self.id:
-                    state_cities.append(value)
-            return state_cities
+            var = storage.all()
+            lista = []
+            result = []
+            for key in var:
+                city = key.replace('.', ' ')
+                city = shlex.split(city)
+                if (city[0] == 'City'):
+                    lista.append(var[key])
+            for elem in lista:
+                if (elem.state_id == self.id):
+                    result.append(elem)
+            return result
