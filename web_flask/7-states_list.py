@@ -6,12 +6,12 @@ from models.state import State
 web_app = Flask(__name__)
 
 
-@web_app.route("/state_list", strict_slashes=False)
+@web_app.route("/states_list", strict_slashes=False)
 def show_states():
     """ Function to return list of states"""
     states = storage.all(states)
     return render_template("7-states_list.html",
-                           states=states)
+                           states_new=states)
 
 
 @web_app.teardown_appcontext
