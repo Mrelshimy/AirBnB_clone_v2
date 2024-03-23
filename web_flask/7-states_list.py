@@ -1,25 +1,24 @@
 #!/usr/bin/python3
-"""Importing Flask to run the web app"""
+""" Flask web_app module"""
 from flask import Flask, render_template
 from models import storage
 from models.state import State
+web_app = Flask(__name__)
 
 
-app = Flask(__name__)
+@web_app.route("/states_list", strict_slashes=False)
+def show_states():
+    """ Function to return list of states"""
+    states = storage.all(State)
+    return render_template("7-states_list.html",
+                           states=states)
 
 
-@app.route("/states_list", strict_slashes=False)
-def display_states():
-    """Render state_list html page to display States created"""
-    states = storage.all()
-    return render_template('7-states_list.html', states=states)
-
-
-@app.teardown_appcontext
+@web_app.teardown_appcontext
 def teardown(self):
-    """Method to remove current SQLAlchemy Session"""
+    """Funtion to remove current SQLalchemy session"""
     storage.close()
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    web_app.run()
