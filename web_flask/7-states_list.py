@@ -11,7 +11,8 @@ def show_states():
     """ Function to return list of states"""
     states = storage.all(states)
     return render_template("7-states_list.html",
-                                   states=states)
+                           states=states)
+
 
 @web_app.teardown_appcontext
 def session_close(self):
