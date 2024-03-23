@@ -10,7 +10,7 @@ web_app = Flask(__name__)
 def show_states():
     """ Function to return list of states"""
     states = storage.all(State)
-    return render_template("7-states_list.html",
+    return render_template("9-states.html",
                            states=states)
 
 
@@ -18,8 +18,11 @@ def show_states():
 def show_state_cities(id):
     """ Function to return list of states"""
     states = storage.all(State)
-    return render_template("9-states.html",
-                           states=states, id=id)
+    for state in states.values():
+        if state.id == id:
+            return render_template("9-states.html",
+                                   state=state)
+    return render_template("9-states.html")
 
 
 @web_app.teardown_appcontext
